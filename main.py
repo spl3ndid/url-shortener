@@ -17,14 +17,17 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
 
 def get_conn():
     return psycopg.connect(
-        host=DB_HOST, port=DB_PORT, dbname=DB_NAME,
-        user=DB_USER, password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT,
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
     )
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # create the table if it doesn't exist
+    # Runs once at startup: create the table if it doesn't exist
     with get_conn() as conn:
         conn.execute(
             "CREATE TABLE IF NOT EXISTS urls (code TEXT PRIMARY KEY, url TEXT NOT NULL)"
